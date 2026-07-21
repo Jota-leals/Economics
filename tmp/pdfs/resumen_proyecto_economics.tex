@@ -1,0 +1,263 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{tcolorbox}
+\usepackage{lastpage}
+
+\definecolor{navy}{HTML}{17324D}
+\definecolor{blue}{HTML}{2878A8}
+\definecolor{lightblue}{HTML}{EAF3F8}
+\definecolor{green}{HTML}{24735C}
+\definecolor{amber}{HTML}{B56A16}
+\definecolor{lightgray}{HTML}{F3F5F7}
+\definecolor{midgray}{HTML}{66727D}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.12}
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=3pt,topsep=3pt}
+\titleformat{\section}{\Large\bfseries\color{navy}}{}{0pt}{}[\vspace{-3pt}\color{blue}\rule{\linewidth}{0.6pt}]
+\titleformat{\subsection}{\large\bfseries\color{blue}}{}{0pt}{}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small\color{midgray}LatAm Macro Monitor}
+\rhead{\small\color{midgray}Estado del proyecto}
+\cfoot{\small\color{midgray}Página \thepage\ de \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newtcolorbox{summarybox}{colback=lightblue,colframe=blue,boxrule=0.7pt,arc=2mm,left=4mm,right=4mm,top=3mm,bottom=3mm}
+\newtcolorbox{warningbox}{colback=amber!7,colframe=amber,boxrule=0.7pt,arc=2mm,left=4mm,right=4mm,top=3mm,bottom=3mm}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\statusdone}{\textcolor{green}{\textbf{Hecho}}}
+\newcommand{\statuspartial}{\textcolor{amber}{\textbf{Parcial}}}
+\newcommand{\statuspending}{\textcolor{midgray}{\textbf{Pendiente}}}
+
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{navy}
+\color{white}
+\vspace*{2.2cm}
+{\Large INFORME DE AVANCE\par}
+\vspace{0.5cm}
+{\fontsize{30}{36}\selectfont\bfseries LatAm Macro Monitor\par}
+\vspace{0.4cm}
+{\Large Explicación completa del proyecto Economics\par}
+\vspace{1.4cm}
+\color{white!85}
+{\large Qué se construyó, cómo funciona y qué falta\par}
+\vfill
+\begin{tcolorbox}[colback=white,colframe=white!35,coltext=navy,boxrule=0.5pt,arc=2mm]
+\textbf{Estado observado:} arquitectura inicial en desarrollo\\
+\textbf{Rama actual:} \code{features/project.config}\\
+\textbf{Fecha de revisión:} 20 de julio de 2026\\
+\textbf{Base del análisis:} archivos actuales, historial Git y cambio local sin confirmar
+\end{tcolorbox}
+\vspace{1cm}
+{\small Documento generado a partir del contenido real del repositorio.}
+\end{titlepage}
+\nopagecolor
+\color{black}
+
+\section{Resumen ejecutivo}
+
+\begin{summarybox}
+El proyecto define la base de una plataforma abierta para monitorear indicadores macroeconómicos y financieros de América Latina. Hasta ahora se ha construido el esqueleto del repositorio, la configuración central, el catálogo geográfico y una interfaz común para futuras fuentes de datos. Aún no existe un flujo funcional que descargue, procese, analice o publique datos.
+\end{summarybox}
+
+La intención del proyecto está expresada en el \code{README.md}: recolectar datos macroeconómicos públicos, monitorear mercados financieros latinoamericanos, producir reportes reproducibles con Quarto y publicar un sitio automatizado mediante GitHub Pages.
+
+El avance real puede resumirse así:
+
+\begin{itemize}
+  \item \statusdone: definición del propósito, estructura de carpetas, exclusiones de Git, configuración de rutas y lista inicial de países.
+  \item \statuspartial: arquitectura para proveedores de datos y conector FRED, todavía sin implementación.
+  \item \statuspending: descarga efectiva, transformación, indicadores, gráficos, notebooks, pruebas, reportes Quarto, automatización y publicación web.
+\end{itemize}
+
+\subsection{Lectura rápida del estado}
+
+\begin{tabularx}{\textwidth}{@{}p{3.5cm}X p{2.2cm}@{}}
+\toprule
+\textbf{Área} & \textbf{Evidencia encontrada} & \textbf{Estado} \\
+\midrule
+Propósito & README con nombre, descripción y cuatro objetivos & \statusdone \\
+Configuración & Rutas, fecha inicial y nombre del proyecto & \statusdone \\
+Cobertura geográfica & 11 economías definidas & \statusdone \\
+Fuentes de datos & Clase abstracta y archivos para FRED, OECD, World Bank y Yahoo & \statuspartial \\
+Datos y análisis & Carpetas creadas, pero sin contenido rastreado & \statuspending \\
+Calidad y entrega & Sin pruebas, reportes, CI ni sitio publicado & \statuspending \\
+\bottomrule
+\end{tabularx}
+
+\section{Qué se ha hecho, en orden cronológico}
+
+El historial contiene tres commits. Todos fueron realizados el 6 de julio de 2026 y muestran una progresión lógica desde la estructura general hacia la capa de datos.
+
+\subsection{1. Inicialización del proyecto}
+
+Commit \code{7c1574b}: \emph{Initialize project structure}.
+
+\begin{itemize}
+  \item Se creó el \code{README.md} con el nombre \textbf{LatAm Macro Monitor}, una descripción breve, el estado ``Under development'' y los objetivos principales.
+  \item Se agregó \code{.gitignore} para excluir el entorno virtual, secretos de \code{.env}, cachés de Python, checkpoints de Jupyter, configuración de VS Code y datos crudos/procesados.
+  \item Se creó \code{proyect.toml}, todavía vacío. El nombre también parece provisional: en el ecosistema Python normalmente sería \code{pyproject.toml}.
+  \item En el sistema de archivos quedaron preparadas las carpetas \code{data}, \code{notebooks}, \code{reports}, \code{src} y \code{test}.
+\end{itemize}
+
+\textbf{Qué aporta:} una separación inicial entre código, datos, análisis, reportes y pruebas, además de evitar que archivos sensibles o pesados entren accidentalmente en Git.
+
+\subsection{2. Módulo de configuración}
+
+Commit \code{2f2496a}: \emph{add config module}.
+
+Se creó el paquete \code{src/config} con dos piezas:
+
+\begin{itemize}
+  \item \code{settings.py} calcula la raíz del repositorio desde la ubicación del archivo y deriva rutas para \code{data}, \code{data/raw}, \code{data/processed} y \code{reports}. También guarda \code{Project\_name = "Economics"} y \code{Start\_date = "2026-07-06"}.
+  \item \code{countries.py} define un diccionario de 11 economías: Chile, Brasil, México, Colombia, Perú, Argentina, Estados Unidos, Eurozona, China, Corea del Sur y Japón.
+\end{itemize}
+
+Esta selección combina mercados latinoamericanos con economías externas relevantes como referencia, socios comerciales o impulsores globales.
+
+\subsection{3. Arquitectura base de fuentes de datos}
+
+Commit \code{9457588}: \emph{define base archiqueture for data sources}.
+
+\begin{itemize}
+  \item \code{src/data/base.py} introduce la clase abstracta \code{datasource}.
+  \item Su método abstracto \code{download\_data(...)} establece el contrato: cada proveedor deberá descargar información y devolver un \code{pandas.DataFrame}.
+  \item Se crearon módulos reservados para \code{fred.py}, \code{oecd.py}, \code{word\_bank.py} y \code{yahoo.py}.
+  \item \code{fred.py} contiene una subclase, pero su método todavía lanza \code{NotImplementedError}; por lo tanto, no descarga nada aún.
+\end{itemize}
+
+\textbf{Qué aporta:} una futura API uniforme. El resto del proyecto podría pedir datos a distintos proveedores mediante la misma operación, reduciendo acoplamiento y facilitando pruebas o sustituciones.
+
+\section{Cómo está organizado el proyecto}
+
+\begin{tabularx}{\textwidth}{@{}p{4.0cm}X@{}}
+\toprule
+\textbf{Ruta} & \textbf{Función actual o prevista} \\
+\midrule
+\code{README.md} & Presenta la visión y los objetivos. \\
+\code{.gitignore} & Protege secretos, entorno local, cachés y datos generados. \\
+\code{data/raw} & Destino previsto para datos originales; actualmente vacío e ignorado. \\
+\code{data/processed} & Destino previsto para datos transformados; actualmente vacío e ignorado. \\
+\code{notebooks} & Espacio previsto para exploración; actualmente vacío. \\
+\code{reports} & Espacio previsto para reportes reproducibles; actualmente vacío. \\
+\code{src/config} & Configuración central y catálogo de países; ya contiene código. \\
+\code{src/data} & Contrato de proveedores y conectores previstos; implementación parcial. \\
+\code{src/indicators} & Futuro cálculo de indicadores; actualmente vacío. \\
+\code{src/processing} & Futuras limpiezas y transformaciones; actualmente vacío. \\
+\code{src/visualizacion} & Futuras visualizaciones; actualmente vacío. \\
+\code{src/utils} & Futuras utilidades compartidas; actualmente vacío. \\
+\code{test} & Futuras pruebas automatizadas; actualmente vacío. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Flujo previsto}
+
+La arquitectura sugiere este recorrido, aunque todavía no está implementado:
+
+\begin{center}
+\fcolorbox{blue}{lightblue}{\strut Fuentes públicas}
+\quad$\rightarrow$\quad
+\fcolorbox{blue}{lightblue}{\strut \code{src/data}}
+\quad$\rightarrow$\quad
+\fcolorbox{blue}{lightblue}{\strut \code{data/raw}}
+\quad$\rightarrow$\quad
+\fcolorbox{blue}{lightblue}{\strut procesamiento}
+\end{center}
+\begin{center}
+$\downarrow$\\[2pt]
+\fcolorbox{green}{green!7}{\strut indicadores y visualizaciones}
+\quad$\rightarrow$\quad
+\fcolorbox{green}{green!7}{\strut reportes Quarto}
+\quad$\rightarrow$\quad
+\fcolorbox{green}{green!7}{\strut GitHub Pages}
+\end{center}
+
+\section{Decisiones técnicas ya tomadas}
+
+\subsection{Python y pandas como base}
+
+La anotación de retorno de \code{download\_data} fija \code{pandas.DataFrame} como formato común. Esto es adecuado para series de tiempo tabulares y permite que las capas posteriores operen de forma homogénea.
+
+\subsection{Interfaz abstracta para proveedores}
+
+El uso de \code{ABC} y \code{@abstractmethod} impide conceptualizar cada fuente como un script aislado. La decisión apunta a conectores intercambiables y a una arquitectura extensible.
+
+\subsection{Configuración centralizada}
+
+Las rutas se derivan con \code{pathlib.Path}, evitando rutas absolutas ligadas a un solo computador. Esto favorece la reproducibilidad, aunque los nombres de variables deberían normalizarse.
+
+\subsection{Separación de datos crudos y procesados}
+
+La división \code{raw/processed} preserva el insumo original y reserva otro espacio para resultados limpios. Al ignorar ambas carpetas, Git no almacenará automáticamente datos locales; más adelante habrá que definir cómo se reproducen o distribuyen.
+
+\subsection{Git y trabajo por rama}
+
+La rama actual es \code{features/project.config}. El commit más reciente está localmente por delante de su referencia remota, mientras que \code{src/data/fred.py} tiene una modificación adicional sin commit.
+
+\section{Hallazgos y riesgos actuales}
+
+\begin{warningbox}
+\textbf{El proyecto todavía no es ejecutable de extremo a extremo.} Su valor actual es estructural: expresa una intención y prepara componentes, pero no produce todavía datos, gráficos, reportes ni una web.
+\end{warningbox}
+
+\begin{enumerate}
+  \item \textbf{Importación local problemática en FRED.} El commit usaba una importación relativa desde \code{.base}, apropiada al importar el módulo como paquete. El cambio local la reemplaza por una importación desde \code{base}; al cargar \code{src.data.fred}, Python normalmente no encuentra ese módulo superior. Conviene restaurar la importación relativa o adoptar importaciones absolutas coherentes.
+  \item \textbf{Conectores vacíos.} OECD, World Bank y Yahoo son archivos de cero bytes. FRED solo contiene un marcador que lanza una excepción.
+  \item \textbf{Configuración de paquete incompleta.} \code{proyect.toml} está vacío y no declara dependencias, versión, empaquetado ni herramientas. Esto impide recrear el entorno de manera confiable.
+  \item \textbf{Convenciones inconsistentes.} Hay códigos de país de dos y tres letras mezclados (por ejemplo, \code{CL} y \code{BRA}); \code{word\_bank.py} probablemente debería llamarse \code{world\_bank.py}; y variables/clases usan mayúsculas de forma irregular.
+  \item \textbf{Sin pruebas.} No hay comprobaciones para rutas, catálogo de países, contrato de proveedores ni esquemas de datos.
+  \item \textbf{Sin persistencia reproducible.} Las carpetas de datos están ignoradas y no hay scripts, manifiestos o instrucciones para regenerarlas.
+  \item \textbf{README breve.} No explica instalación, ejecución, fuentes, variables de entorno, estructura de datos ni flujo de contribución.
+  \item \textbf{Entorno virtual no verificable en esta revisión.} El ejecutable registrado por \code{.venv} apunta a una instalación de Python 3.14 que no estuvo accesible desde el entorno de revisión; esto puede ser una limitación del entorno o un entorno virtual roto.
+\end{enumerate}
+
+\section{Qué falta para alcanzar los objetivos}
+
+\begin{tabularx}{\textwidth}{@{}p{4.2cm}X@{}}
+\toprule
+\textbf{Objetivo declarado} & \textbf{Trabajo restante principal} \\
+\midrule
+Recolectar datos públicos & Elegir series, credenciales cuando correspondan, implementar conectores, normalizar fechas/unidades, manejar errores y guardar resultados. \\
+Monitorear mercados & Definir indicadores, frecuencias, monedas, benchmarks y reglas de actualización; implementar cálculos y validaciones. \\
+Reportes con Quarto & Crear archivos \code{.qmd}, tablas y gráficos; parametrizar fechas/países y documentar cómo renderizarlos. \\
+Sitio con GitHub Pages & Configurar Quarto website, workflow de GitHub Actions, caché/datos, publicación y manejo seguro de secretos. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Secuencia recomendada}
+
+\begin{enumerate}
+  \item \textbf{Hacer instalable el proyecto:} renombrar y completar \code{pyproject.toml}, declarar dependencias y documentar la instalación.
+  \item \textbf{Normalizar fundamentos:} convenciones de nombres, códigos geográficos, imports y estructura de paquetes.
+  \item \textbf{Entregar un flujo vertical mínimo:} seleccionar una serie FRED, descargarla, validarla, guardarla y mostrarla en un reporte sencillo.
+  \item \textbf{Añadir pruebas:} rutas, conectores, columnas esperadas, frecuencia, ausencia de duplicados y manejo de fallas de red.
+  \item \textbf{Extender proveedores:} World Bank, OECD y Yahoo con el mismo contrato y un esquema común.
+  \item \textbf{Construir indicadores y visualizaciones:} primero para uno o dos países, luego ampliar cobertura.
+  \item \textbf{Automatizar:} actualización programada, Quarto y GitHub Pages cuando el flujo local sea estable.
+\end{enumerate}
+
+\section{Conclusión}
+
+Has hecho correctamente el trabajo de cimentación: definiste qué producto quieres construir, separaste responsabilidades, centralizaste rutas, delimitaste la cobertura geográfica e introdujiste una abstracción común para fuentes de datos. Los tres commits muestran una evolución ordenada y comprensible.
+
+El proyecto aún está antes de su primer producto mínimo funcional. El siguiente hito más útil no sería crear más carpetas, sino completar una cadena pequeña y verificable desde una fuente real hasta un reporte. Esa primera cadena permitirá validar las decisiones de arquitectura antes de replicarlas en todos los países y proveedores.
+
+\vfill
+{\small\color{midgray}\textbf{Nota metodológica.} Este informe describe el estado observado del repositorio al 20 de julio de 2026. No atribuye como terminadas capacidades que solo aparecen como objetivos, carpetas vacías o marcadores de implementación. El PDF es el único artefacto nuevo de entrega; no se modificó el código fuente del proyecto.}
+
+\end{document}
